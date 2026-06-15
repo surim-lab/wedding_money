@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>축의금 정산</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Wedding Gift Ledger</p>
+        <h1>축의금 정산</h1>
+      </div>
+      <div class="top-actions">
+        <button id="exportCsv" class="button secondary" type="button">CSV 내보내기</button>
+        <button id="resetAll" class="button danger" type="button">전체 초기화</button>
+      </div>
+    </header>
+
+    <section class="summary-grid" aria-label="정산 요약">
+      <article class="metric">
+        <span>총 금액</span>
+        <strong id="totalAmount">0원</strong>
+      </article>
+      <article class="metric">
+        <span>등록 인원</span>
+        <strong id="totalCount">0명</strong>
+      </article>
+      <article class="metric">
+        <span>평균 금액</span>
+        <strong id="averageAmount">0원</strong>
+      </article>
+      <article class="metric">
+        <span>현금 합계</span>
+        <strong id="cashTotal">0원</strong>
+      </article>
+    </section>
+
+    <section class="workbench">
+      <form id="entryForm" class="panel form-panel" autocomplete="off">
+        <div class="panel-head">
+          <h2 id="formTitle">내역 입력</h2>
+          <button id="cancelEdit" class="ghost hidden" type="button">수정 취소</button>
+        </div>
+
+        <label>
+          구분
+          <select id="weddingSide" name="weddingSide">
+            <option value="groom">신랑</option>
+            <option value="bride">신부</option>
+          </select>
+        </label>
+
+        <label>
+          이름
+          <input id="guestName" name="guestName" type="text" placeholder="예: 김민준" required maxlength="40">
+        </label>
+
+        <label>
+          소속
+          <select id="guestRelation" name="guestRelation">
+            <option value="외가">외가</option>
+            <option value="친가">친가</option>
+            <option value="엄마 지인">엄마 지인</option>
+            <option value="아빠 지인">아빠 지인</option>
+            <option value="초등학교">초등학교</option>
+            <option value="중학교">중학교</option>
+            <option value="고등학교">고등학교</option>
+            <option value="대학교">대학교</option>
+            <option value="회사">회사</option>
+            <option value="지인">지인</option>
+            <option value="그 외">그 외</option>
+          </select>
+        </label>
+
+        <label>
+          금액
+          <input id="giftAmount" name="giftAmount" type="text" inputmode="numeric" placeholder="예: 100000" required>
+        </label>
+
+        <label>
+          메모
+          <input id="memo" name="memo" type="text" placeholder="예: 식권 2장, 계좌이체" maxlength="80">
+        </label>
+
+        <button class="button primary" type="submit">내역 저장</button>
+      </form>
+
+      <section class="panel cash-panel" aria-labelledby="cashTitle">
+        <div class="panel-head">
+          <h2 id="cashTitle">권종별 현금 확인</h2>
+          <button id="clearBills" class="ghost" type="button">비우기</button>
+        </div>
+        <div class="bill-grid" id="billGrid"></div>
+        <div class="check-row">
+          <span>명단 총액과 차이</span>
+          <strong id="cashDifference">0원</strong>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel ledger-panel">
+      <div class="ledger-tools">
+        <h2>축의금 명단</h2>
+        <div class="filters">
+          <input id="searchInput" type="search" placeholder="이름, 구분, 소속, 메모 검색">
+          <select id="sortSelect" aria-label="정렬">
+            <option value="newest">최근 입력순</option>
+            <option value="name">이름순</option>
+            <option value="amountDesc">금액 높은순</option>
+            <option value="amountAsc">금액 낮은순</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>이름</th>
+              <th>구분</th>
+              <th>소속</th>
+              <th class="number">금액</th>
+              <th>메모</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+        <p id="emptyState" class="empty">아직 입력된 내역이 없습니다.</p>
+      </div>
+    </section>
+
+    <footer class="contact-info">
+      <strong>황수림</strong>
+      <span>rabit331@naver.com</span>
+      <span>010-8107-7430</span>
+    </footer>
+  </main>
+
+  <template id="billTemplate">
+    <label class="bill-item">
+      <span></span>
+      <input type="number" min="0" step="1" value="0">
+    </label>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
